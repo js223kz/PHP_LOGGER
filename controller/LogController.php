@@ -1,21 +1,20 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: mkt
- * Date: 2015-10-16
- * Time: 14:33
- */
 
 namespace controller;
 
-require_once("Logger.php");
+require_once('view/LoggingView.php');
 
 class LogController
 {
+    private $adminLoggerView;
+    public function __construct(){
 
+        $this->adminLoggerView = new \view\LoggingView();
+        var_dump("hello");
 
+    }
 
-    function loggStuff() {
+   function loggStuff() {
         loggHeader("A header");
         loggThis("write a message");
         loggThis("include call trace", null, true);
