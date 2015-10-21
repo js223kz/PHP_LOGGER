@@ -1,7 +1,7 @@
 <?php
 
 //This has no namespace for convenience, it should really be a common module
-namespace logger;
+namespace model;
 
 class LogItem {
 	//Maybe add some information hiding
@@ -31,9 +31,14 @@ class LogItem {
 	* see http://se1.php.net/manual/en/function.microtime.php
 	*/
 	public $m_microTime;
-	
-	
+
+	public $m_sessionID;
+
+	public $m_ip;
+
+
 	/**
+	 *
 	* Create a log item
 	*
 	* @param string $logMessageString The message you intend to log
@@ -43,16 +48,17 @@ class LogItem {
 	*/
 	public function __construct($logMessageString, $includeTrace = false, $logThisObject = null) {
 
+		$this->m_sessionID = session_id();
+		$this->m_ip = $_SERVER['REMOTE_ADDR'];
+
 		$this->m_message = $logMessageString;
 
-		if ($logThisObject != null)
+		if ($logThisObject != null){
 			$this->m_object = var_export($logThisObject, true);
-		
-		$this->m_debug_backtrace = debug_backtrace();
-
-		$this->m_microTime = microtime();
-
-		$this->m_calledFrom = $this->cleanFilePath($this->m_debug_backtrace[2]["file"]) . " " . $this->m_debug_backtrace[2]["line"];
+			$this->m_debug_backtrace = debug_backtrace();
+			$this->m_microTime = microtime();
+			$this->m_calledFrom = $this->cleanFilePath($this->m_debug_backtrace[2]["file"]) . " " . $this->m_debug_backtrace[2]["line"];
+		}
 
 
 		if (!$includeTrace) {

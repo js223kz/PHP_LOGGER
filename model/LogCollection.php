@@ -1,6 +1,6 @@
 <?php
 
-namespace logger;
+namespace model;
 
 require_once("LogItem.php");
 
@@ -18,6 +18,7 @@ class LogCollection {
 	*/
 	public function log($string, $trace = false, $object = null, $class = "normal") {
 		$this->logArray[] = new LogItem($string, $trace, $object);
+		var_dump($this->getList());
 	}
 	
 	/**

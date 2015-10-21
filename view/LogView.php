@@ -1,6 +1,6 @@
 <?php
 
-namespace logger;
+namespace model;
 
 
 
@@ -96,7 +96,7 @@ class LogView {
 
 		$date = date("Y-m-d H:i:s", $sec);
 		$ret =  "<li>
-					<Strong>$item->m_message </strong> $item->m_calledFrom 
+					<Strong>$item->m_message </strong> $item->m_calledFrom
 					<div style='font-size:small'>$date $usec</div>
 					<pre>$object</pre>
 					

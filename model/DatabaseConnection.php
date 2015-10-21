@@ -3,20 +3,23 @@
  * Created by PhpStorm.
  * User: mkt
  * Date: 2015-10-20
- * Time: 11:35
+ * Time: 16:58
  */
 
 namespace model;
-require_once('Settings.php');
 
 class DatabaseConnection
 {
 
-    public function dataBaseConn(){
-        $data = new Settings();
+    private $mysqli;
+    public function DbConnection(){
 
-
-
+        $this->mysqli = new \mysqli(\Settings::HOST, \Settings::USERNAME, \Settings::PASSWORD,
+                                    \Settings::DATABASENAME, 8889);
+        if (mysqli_connect_errno()) {
+            throw new \Exception( $this->mysqli->error);
+            exit();
+        }
+        return $this->mysqli;
     }
-
 }
