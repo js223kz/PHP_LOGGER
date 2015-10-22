@@ -8,30 +8,24 @@
 
 namespace controller;
 
-require_once('model/LogItem.php');
-require_once('model/LogDAL.php');
-require_once('model/LogCollection.php');
-require_once('model/DatabaseConnection.php');
-require_once("Logger.php");
 
-class AdminController
-{
+use model\LogFacade;
 
-    public function __construct(){
-        $this->loggStuff();
+class AdminController{
 
-        saveLog();
-        echoLog(false);
+    public function __construct(LogFacade $logFacade){
+        $this->loggStuff($logFacade);
+        $logFacade->getLogAllItems();
+        $logFacade->echoLog(false);
 
     }
 
-    public function loggStuff() {
-    loggHeader("A header");
-    loggThis("write a message");
-    loggThis("include call trace", null, true);
-    loggThis("include an object", new \Exception("foo exception"), false);
+    public function loggStuff(LogFacade $logFacade) {
+    $logFacade->loggHeader("A header");
+    //loggThis("write a message");
+    //loggThis("include call trace", null, true);
+    //loggThis("include an object", new \Exception("foo exception"), false);
     }
-
 }
 
 //show log

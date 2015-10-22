@@ -2,12 +2,13 @@
 //This has no namespace for convenience, it should really be a common module
 require_once("model/LogCollection.php");
 require_once("model/LogDAL.php");
+require_once("model/LogItem.php");
 require_once("view/LogView.php");
 
 
 //uses globals for convenience
 //to let us avoid create and use an object...
-$logCollection = new model\LogCollection();
+//$logCollection = new model\LogCollection();
 
 /**
 * Logging Method
@@ -16,12 +17,16 @@ $logCollection = new model\LogCollection();
 * @param boolean $includeTrace save callstack
 * @return void
 */
-function loggThis($logMessageString, $logThisObject = null, $includeTrace = false) {
-	global $logCollection;
-	$logCollection->log($logMessageString, $includeTrace, $logThisObject);
-
+private $saveNewLogItem;
+public function __construct(){
+	$this->saveNewLogItem = new model\LogDAL();
 }
+function loggThis($logMessageString, $logThisObject = null, $includeTrace = false) {
 
+	$this->saveNewLogItem->AddLogItem(new \model\LogItem($logMessageString, $includeTrace, $logThisObject));
+	//global $logCollection;
+	//$logCollection->log($logMessageString, $includeTrace, $logThisObject);
+}
 
 /**
 * Logging Method
@@ -30,8 +35,9 @@ function loggThis($logMessageString, $logThisObject = null, $includeTrace = fals
 * @return void
 */
 function loggHeader($logMessageString) {
-	global $logCollection;
-	$logCollection->log("<h2>$logMessageString</h2>", null, false);
+	//global $logCollection;
+	//$logCollection->log("<h2>$logMessageString</h2>", null, false);
+	$this->saveNewLogItem->AddLogItem(new \model\LogItem("<h2>$logMessageString</h2>", null, false));
 }
 
 /**
@@ -45,13 +51,10 @@ function echoLog($doDumpSuperGlobals = true) {
 	echo $logView->getDebugData($doDumpSuperGlobals);
 }
 
-/**
- * Saves logCollection array to database
- * @throws Exception
- */
+function getLogAllItems(){
+	$getLogItems = new \model\LogDAL();
 
-function saveLog(){
-	$saveLogItems = new \model\LogDAL();
-	global $logCollection;
-	$saveLogItems->AddLogItem($logCollection);
+	foreach($getLogItems->getAllLogItems() as $item){
+		var_dump($item . "\n");
+	}
 }

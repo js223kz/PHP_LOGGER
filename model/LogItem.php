@@ -9,7 +9,10 @@ class LogItem {
 	* @var String
 	*/
 	public $m_message;
-	
+
+	public $m_sessionID;
+
+	public $m_ip;
 	/**
 	* @var mixed or null
 	*/
@@ -32,9 +35,6 @@ class LogItem {
 	*/
 	public $m_microTime;
 
-	public $m_sessionID;
-
-	public $m_ip;
 
 
 	/**
@@ -47,7 +47,8 @@ class LogItem {
 	* @return void
 	*/
 	public function __construct($logMessageString, $includeTrace = false, $logThisObject = null) {
-
+		$this->m_sessionID = session_id();
+		$this->m_ip = $_SERVER['REMOTE_ADDR'];
 
 		$this->m_message = $logMessageString;
 

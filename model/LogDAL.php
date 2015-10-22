@@ -9,13 +9,12 @@
 namespace model;
 
 require_once('DatabaseConnection.php');
-
 class LogDAL
 {
     private static $databaseTable = "logitem";
     private $database;
     private $dbConnection;
-    private $logItems = array();
+
 
     public function __construct(){
         $this->database = new DatabaseConnection();
@@ -24,58 +23,32 @@ class LogDAL
     }
 
     public function getAllLogItems(){
+        $logItems = array();
         $stmt = $this->dbConnection->prepare("SELECT * FROM " . self::$databaseTable);
         if ($stmt === FALSE) {
             throw new \Exception($this->database->error);
         }
         $stmt->execute();
 
-        $stmt->bind_result($session, $ip, $object, $backtrace, $calledfrom, $microtime, $message);
+        $stmt->bind_result($id, $object);
         while ($stmt->fetch()) {
-            $logItem = new LogItem();
-            $this->logItems->add($logItem);
+            $newObject = unserialize($object);
+            var_dump($id);
+            array_push($logItems, [$id => $newObject]);
         }
-        return  $this->logItems;
+        return $logItems;
     }
 
-   public function AddLogItem($newLogCollection){
+   public function AddLogItem(LogItem $newLogItem){
 
-        //var_dump($newLogCollection);
+       $logitem = serialize($newLogItem);
 
-       $sessionID = session_id();
-       $ip = $_SERVER['REMOTE_ADDR'];
-       $logitem = serialize($newLogCollection);
-
-       var_dump($logitem);
-
-       $stmt = $this->dbConnection->prepare("INSERT INTO `logitem` (`ip` , `sessionid`, `logitemobject`) VALUES (?, ?, ?)");
+       $stmt = $this->dbConnection->prepare("INSERT INTO `logitem` (`logitemobject`) VALUES (?)");
        if ($stmt === FALSE) {
            throw new \Exception($this->database->error);
        }
 
-       $stmt->bind_param('sss', $ip, $sessionID, $logitem);
+       $stmt->bind_param('s', $logitem);
        $stmt->execute();
-
-        /*$stmt = $this->dbConnection->prepare("INSERT INTO `logitem` (`sessionid` , `ip`,
-                                    `object`, `backtrace`, `calledfrom`, `microtime`, `message`)
-				                      VALUES (?, ?, ?, ?, ?, ?, ?)");
-            if ($stmt === FALSE) {
-                throw new \Exception($this->database->error);
-            }
-
-        $session = $newLogItem->m_sessionID;
-        $ip = $newLogItem->m_ip;
-        $object = serialize($newLogItem->m_object);
-        $backtrace = $newLogItem->m_debug_backtrace;
-        $calledfrom = $newLogItem->m_calledFrom;
-        $microtime = $newLogItem->m_microTime;
-        $message = $newLogItem->m_message;
-
-        $stmt->bind_param('sssbsss', $session, $ip, $object, $backtrace, $calledfrom, $microtime, $message);
-        $stmt->execute();*/
     }
 }
-
-
-//INSERT INTO `logitem`(`sessionid`, `ip`, `object`, `backtrace`, `calledfrom`, `mictrotime`, `message`)
-//VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6],[value-7])
