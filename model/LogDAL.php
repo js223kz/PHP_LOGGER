@@ -9,6 +9,7 @@
 namespace model;
 
 require_once('DatabaseConnection.php');
+include("model/LogItem.php");
 class LogDAL
 {
     private static $databaseTable = "logitem";
@@ -19,36 +20,33 @@ class LogDAL
     public function __construct(){
         $this->database = new DatabaseConnection();
         $this->dbConnection = $this->database->DbConnection();
-
     }
 
     public function getAllLogItems(){
         $logItems = array();
-        $stmt = $this->dbConnection->prepare("SELECT * FROM " . self::$databaseTable);
-        if ($stmt === FALSE) {
+        $query = $this->dbConnection->prepare("SELECT * FROM " . self::$databaseTable);
+        if ($query === FALSE) {
             throw new \Exception($this->database->error);
         }
-        $stmt->execute();
+        $query->execute();
 
-        $stmt->bind_result($id, $object);
-        while ($stmt->fetch()) {
-            $newObject = unserialize($object);
-            var_dump($id);
-            array_push($logItems, [$id => $newObject]);
+        $query->bind_result($id, $object);
+        while ($query->fetch()) {
+            $logItem = unserialize($object);
+            array_push($logItems, $logItem);
         }
         return $logItems;
     }
 
    public function AddLogItem(LogItem $newLogItem){
+        $logitem = serialize($newLogItem);
 
-       $logitem = serialize($newLogItem);
-
-       $stmt = $this->dbConnection->prepare("INSERT INTO `logitem` (`logitemobject`) VALUES (?)");
-       if ($stmt === FALSE) {
+       $query = $this->dbConnection->prepare("INSERT INTO `logitem` (`logitemobject`) VALUES (?)");
+       if ($query === FALSE) {
            throw new \Exception($this->database->error);
        }
 
-       $stmt->bind_param('s', $logitem);
-       $stmt->execute();
+       $query->bind_param('s', $logitem);
+       $query->execute();
     }
 }

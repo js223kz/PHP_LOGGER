@@ -10,21 +10,20 @@ namespace controller;
 
 
 use model\LogFacade;
+use view\AdminView;
 
 class AdminController{
 
-    public function __construct(LogFacade $logFacade){
-        $this->loggStuff($logFacade);
-        $logFacade->getLogAllItems();
-        $logFacade->echoLog(false);
-
+    public function __construct(LogFacade $logFacade, AdminView $adminView){
+        //$this->loggStuff($logFacade);
+        $adminView->showIPList($logFacade);
     }
 
     public function loggStuff(LogFacade $logFacade) {
-    $logFacade->loggHeader("A header");
-    //loggThis("write a message");
-    //loggThis("include call trace", null, true);
-    //loggThis("include an object", new \Exception("foo exception"), false);
+        $logFacade->loggHeader("Test");
+        $logFacade->loggThis("testar igen");
+        $logFacade->loggThis("Test", null, true);
+        $logFacade->loggThis("Från en annan ip include an object", new \Exception("foo exception"), false);
     }
 }
 

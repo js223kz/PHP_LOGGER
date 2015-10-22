@@ -21,7 +21,7 @@ class LogFacade
     }
 
     function loggThis($logMessageString, $logThisObject = null, $includeTrace = false) {
-        $this->saveNewLogItem->AddLogItem(new \model\LogItem($logMessageString, $includeTrace, $logThisObject));
+       $this->saveNewLogItem->AddLogItem(new \model\LogItem($logMessageString, $includeTrace, $logThisObject));
     }
 
     function loggHeader($logMessageString) {
@@ -33,18 +33,15 @@ class LogFacade
      *
      * @param boolean $doDumpSuperGlobals dump $_GET, $_POST etc
      */
-    function echoLog($doDumpSuperGlobals = true) {
+   /* function echoLog($doDumpSuperGlobals = true) {
         global $logCollection;
         $logView = new \model\LogView($logCollection);
         echo $logView->getDebugData($doDumpSuperGlobals);
-    }
+    }*/
 
     function getLogAllItems()
     {
         $getLogItems = new \model\LogDAL();
-        $getLogItems->getAllLogItems();
-        /*foreach ($getLogItems->getAllLogItems() as $item) {
-            var_dump($item["id"]);
-        }*/
+        return $getLogItems->getAllLogItems();
     }
 }
