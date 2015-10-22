@@ -18,15 +18,9 @@ class AdminController
 {
 
     public function __construct(){
-        $logCollection = new \model\LogCollection();
-
-
         $this->loggStuff();
 
-        //$newLogItem = new \model\LogItem("include two objects", new \Exception("foo exception"), true);
-        //$DAL = new\model\LogDAL();
-        //$DAL->AddLogItem($newLogItem);
-
+        saveLog();
         echoLog(false);
 
     }

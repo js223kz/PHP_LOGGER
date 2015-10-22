@@ -1,6 +1,7 @@
 <?php
 //This has no namespace for convenience, it should really be a common module
 require_once("model/LogCollection.php");
+require_once("model/LogDAL.php");
 require_once("view/LogView.php");
 
 
@@ -42,4 +43,15 @@ function echoLog($doDumpSuperGlobals = true) {
 	global $logCollection;
 	$logView = new \model\LogView($logCollection);
 	echo $logView->getDebugData($doDumpSuperGlobals);
+}
+
+/**
+ * Saves logCollection array to database
+ * @throws Exception
+ */
+
+function saveLog(){
+	$saveLogItems = new \model\LogDAL();
+	global $logCollection;
+	$saveLogItems->AddLogItem($logCollection);
 }

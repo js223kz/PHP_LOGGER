@@ -18,7 +18,7 @@ class LogCollection {
 	*/
 	public function log($string, $trace = false, $object = null, $class = "normal") {
 		$this->logArray[] = new LogItem($string, $trace, $object);
-		var_dump($this->getList());
+		//var_dump($this->getList());
 	}
 	
 	/**
