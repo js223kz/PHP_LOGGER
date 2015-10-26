@@ -15,25 +15,53 @@ require_once("model/LogItem.php");
 class adminView
 {
 
+    private static $ip = "ip";
+    private static $microTime = "microtime";
+    private static $numberOfTimes = "numberOfTimes";
+    private $logItems = array();
+    private $ipaddresses = array();
 
-    public function showIPList(LogFacade $logFacade){
-        $logItems = array();
+
+    public function getIPList(LogFacade $logFacade)
+    {
+
+        //returning array of LogItem objects
         $items = $logFacade->getLogAllItems();
-        $latestItem = microtime();
 
-        foreach($items as $key => $item) {
-            array_push($logItems, $item->m_ip);
-
+        foreach ($items as $key => $item) {
+            array_push($this->ipaddresses, $item->m_ip);
+            if($this->logItems == null){
+                array_push($this->logItems, [Self::$ip => $item->m_ip, Self::$microTime => $item->m_microTime]);
+            }
+            if($this->logItems != null){
+                $this->checkIfIPUnique($item);
+                $this->getOccurances();
+            }
         }
-        var_dump($logItems);
-        foreach($logItems as $sessionid){
-            $str = (string)$sessionid;
-            $count = array_count_values($logItems);
-            $num = $count[$sessionid];
+        var_dump($this->logItems);
+    }
+
+    private function getOccurances(){
+        $count = array_count_values($this->ipaddresses);
+        for($i=0; $i < count($this->logItems); $i++){
+            $num = $count[$this->logItems[$i][Self::$ip]];
+            $this->logItems[$i][Self::$numberOfTimes] = $num;
         }
     }
+
+    private function checkIfIPUnique($item){
+        $found = false;
+        foreach($this->logItems as $value){
+            if($value[Self::$ip] == $item->m_ip){
+                $found = true;
+            }else{
+                $found = false;
+            }
+        }
+        if($found != true){
+            array_push($this->logItems, [Self::$ip => $item->m_ip, Self::$microTime => $item->m_microTime]);
+
+        }
+
+    }
 }
-
-//if(!in_array($item->m_ip, $logItems)){
-
-//}

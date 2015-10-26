@@ -18,6 +18,7 @@ require_once("view/LogView.php");
 * @return void
 */
 private $saveNewLogItem;
+
 public function __construct(){
 	$this->saveNewLogItem = new model\LogDAL();
 }
@@ -37,7 +38,7 @@ function loggThis($logMessageString, $logThisObject = null, $includeTrace = fals
 function loggHeader($logMessageString) {
 	//global $logCollection;
 	//$logCollection->log("<h2>$logMessageString</h2>", null, false);
-	$this->saveNewLogItem->AddLogItem(new \model\LogItem("<h2>$logMessageString</h2>", null, false));
+	$this->saveLogItems->AddLogItem(new \model\LogItem("<h2>$logMessageString</h2>", null, false));
 }
 
 /**
@@ -45,16 +46,14 @@ function loggHeader($logMessageString) {
 * 
 * @param boolean $doDumpSuperGlobals dump $_GET, $_POST etc
 */
-function echoLog($doDumpSuperGlobals = true) {
+/*function echoLog($doDumpSuperGlobals = true) {
 	global $logCollection;
 	$logView = new \model\LogView($logCollection);
 	echo $logView->getDebugData($doDumpSuperGlobals);
-}
+}*/
 
 function getLogAllItems(){
 	$getLogItems = new \model\LogDAL();
 
-	foreach($getLogItems->getAllLogItems() as $item){
-		var_dump($item . "\n");
-	}
+	return $getLogItems->getAllLogItems();
 }

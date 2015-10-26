@@ -48,14 +48,14 @@ class LogItem {
 	*/
 	public function __construct($logMessageString, $includeTrace = false, $logThisObject = null) {
 		$this->m_sessionID = session_id();
-		$this->m_ip = "222.222.22.222";//$_SERVER['REMOTE_ADDR'];
+		$this->m_ip = "111.111.11.111";//$_SERVER['REMOTE_ADDR'];
+		$this->m_microTime = microtime();
 
 		$this->m_message = $logMessageString;
 
 		if ($logThisObject != null){
 			$this->m_object = var_export($logThisObject, true);
 			$this->m_debug_backtrace = debug_backtrace();
-			$this->m_microTime = microtime();
 			$this->m_calledFrom = $this->cleanFilePath($this->m_debug_backtrace[2]["file"]) . " " . $this->m_debug_backtrace[2]["line"];
 		}
 
