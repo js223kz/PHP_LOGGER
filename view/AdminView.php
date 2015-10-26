@@ -30,6 +30,7 @@ class adminView
 
         foreach ($items as $key => $item) {
             array_push($this->ipaddresses, $item->m_ip);
+
             if($this->logItems == null){
                 array_push($this->logItems, [Self::$ip => $item->m_ip, Self::$microTime => $item->m_microTime]);
             }
@@ -55,6 +56,9 @@ class adminView
 
         foreach($this->logItems as $value){
             if($value[Self::$ip] == $item->m_ip){
+                //this value doesn´t change. If Ipaddress is already in the array
+                // I want to replace mictrotime of that element to
+                //the latest $item microtime since that is the latter of the two
                 $value[Self::$microTime] = $item->m_microTime;
                 $found = true;
             }else{
