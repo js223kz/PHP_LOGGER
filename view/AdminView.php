@@ -38,6 +38,7 @@ class adminView
                 $this->getOccurances();
             }
         }
+
         var_dump($this->logItems);
     }
 
@@ -51,8 +52,10 @@ class adminView
 
     private function checkIfIPUnique($item){
         $found = false;
+
         foreach($this->logItems as $value){
             if($value[Self::$ip] == $item->m_ip){
+                $value[Self::$microTime] = $item->m_microTime;
                 $found = true;
             }else{
                 $found = false;
@@ -60,8 +63,10 @@ class adminView
         }
         if($found != true){
             array_push($this->logItems, [Self::$ip => $item->m_ip, Self::$microTime => $item->m_microTime]);
-
         }
-
     }
 }
+
+
+//list($usec, $sec) = explode(" ", $item->m_microTime);
+//$date = date("Y-m-d H:i:s", $sec);

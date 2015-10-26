@@ -48,7 +48,7 @@ class LogItem {
 	*/
 	public function __construct($logMessageString, $includeTrace = false, $logThisObject = null) {
 		$this->m_sessionID = session_id();
-		$this->m_ip = "111.111.11.111";//$_SERVER['REMOTE_ADDR'];
+		$this->m_ip = "333.333.33.333";//$_SERVER['REMOTE_ADDR'];
 		$this->m_microTime = microtime();
 
 		$this->m_message = $logMessageString;
