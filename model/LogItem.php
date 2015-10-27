@@ -51,6 +51,7 @@ class LogItem {
 		$this->m_ip = "333.333.33.333";//$_SERVER['REMOTE_ADDR'];
 		$this->m_microTime = microtime();
 
+
 		$this->m_message = $logMessageString;
 
 		if ($logThisObject != null){

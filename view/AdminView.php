@@ -3,6 +3,7 @@
 namespace view;
 
 use model\LogFacade;
+
 require_once("model/LogItem.php");
 
 class adminView
@@ -11,61 +12,95 @@ class adminView
     private static $ip = "ip";
     private static $microTime = "microtime";
     private static $numberOfTimes = "numberOfTimes";
-    private $logItems = array();
-    private $ipaddresses = array();
-
-    public function getIPList(LogFacade $logFacade){
-        $this->setIPList($logFacade);
-    }
+    private $listItems = array();
 
 
-    private function setIPList(LogFacade $logFacade)
+    /**
+     * @param $logFacade interacts between models and controller
+     * gets all objects from database and creates array with
+     * data to show in list
+     */
+
+    public function getIPList(LogFacade $logFacade)
     {
         //returning array of LogItem objects
-        $items = $logFacade->getLogAllItems();
+        $logItems = $logFacade->getLogAllItems();
 
-        foreach ($items as $key => $item) {
-            array_push($this->ipaddresses, $item->m_ip);
+        foreach ($logItems as $logItem) {
 
-            if($this->logItems == null){
-                array_push($this->logItems, [Self::$ip => $item->m_ip, Self::$microTime => $item->m_microTime]);
-            }
-            if($this->logItems != null){
-                $this->checkIfIPUnique($item);
-                $this->getOccurances();
+            $num = $this->getNumberOfSessions($logItem->m_ip, $logItems);
+            $latest = $this->getLatestSession($logItem->m_ip, $logItems);
+
+            if ($this->checkIfIPUnique($logItem)) {
+                array_push($this->listItems, [Self::$ip => $logItem->m_ip, Self::$microTime => $latest, Self::$numberOfTimes => $num]);
             }
         }
         $this->renderHTML();
     }
 
-    private function checkIfIPUnique($item){
-        $found = false;
+    /**
+     * @param $ipToCheck , particular ip-address
+     * @param $logItems , array with LogItem objects
+     * @return last item in array which is the latest date
+     * of logged session for one particular ipaddress
+     * this function runs for each LogItem object stored in database
+     */
+    private function getLatestSession($ipToCheck, $logItems)
+    {
+        $sessionDateArray = array();
 
-        foreach($this->logItems as $value){
-            if($value[Self::$ip] == $item->m_ip){
-                //this value doesn´t change. If Ipaddress is already in the array
-                // I want to replace mictrotime of that element to
-                //the latest $item microtime since that is the latter of the two
-                $value[Self::$microTime] = $item->m_microTime;
-                $found = true;
-            }else{
-                $found = false;
+        foreach ($logItems as $logItem) {
+            //create readable datetsring from microtime
+            list($usec, $sec) = explode(" ", $logItem->m_microTime);
+            $sessionDate = date("Y-m-d H:i:s", $sec);
+
+            if ($ipToCheck == $logItem->m_ip) {
+                if (!in_array($sessionDate, $sessionDateArray)) {
+                    array_push($sessionDateArray, $sessionDate);
+                }
             }
         }
-        if($found != true){
-            array_push($this->logItems, [Self::$ip => $item->m_ip, Self::$microTime => $item->m_microTime]);
-        }
+        return end($sessionDateArray);
     }
 
-    private function getOccurances(){
-        $count = array_count_values($this->ipaddresses);
-        for($i=0; $i < count($this->logItems); $i++){
-            $num = $count[$this->logItems[$i][Self::$ip]];
-            $this->logItems[$i][Self::$numberOfTimes] = $num;
+    /**
+     * @param $ipToCheck , particular ip-address
+     * @param $logItems , $items array with LogItem objects
+     * @return int, number of unique sessionid´s
+     * for a particular ip-address
+     */
+    private function getNumberOfSessions($ipToCheck, $logItems)
+    {
+        $sessionArray = array();
+
+        foreach ($logItems as $logItem) {
+            if ($ipToCheck == $logItem->m_ip) {
+                if (!in_array($logItem->m_sessionID, $sessionArray)) {
+                    array_push($sessionArray, $logItem->m_sessionID);
+                }
+            }
         }
+        return count($sessionArray);
     }
 
-    private function renderHTML(){
+    /**
+     * @param $logItem , one particular LogItem objects
+     * @return bool if ip-address is not already i list to show
+     */
+    private function checkIfIPUnique($logItem)
+    {
+
+        foreach ($this->listItems as $value) {
+            if ($value[Self::$ip] == $logItem->m_ip) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    private function renderHTML()
+    {
         echo '<!DOCTYPE html>
             <html>
             <head>
@@ -75,7 +110,7 @@ class adminView
             <body>
               <h1>Logger</h1>
               <div class="container">
-                ' .$this->renderIPList(). '
+                ' . $this->renderIPList() . '
               </div>
              </body>
             </html>
@@ -83,19 +118,21 @@ class adminView
     }
 
 
-    private function renderIPList(){
+    private function renderIPList()
+    {
         $ret = "<h3>Logged Ip addresses</h3>
 
 				<ul>";
-        foreach ($this->logItems as $ipAdresses) {
+        foreach ($this->listItems as $ipAdresses) {
             $ip = $ipAdresses[Self::$ip];
             $occurrences = $ipAdresses[Self::$numberOfTimes];
-            list($date, $sec) = explode(" ", $ipAdresses[Self::$microTime]);
-            $date = date("Y-m-d H:i:s", $sec);
-            $ret .= "<li>$ip</li>";
-            $ret .= "<li>Number of times:  $occurrences</li>";
-            $ret .= "<li>Logged latest at:  $date</li>";
-            $ret .="<br>";
+            $time = $ipAdresses[Self::$microTime];
+
+
+            $ret .= "<li>IP-address: $ip</li>";
+            $ret .= "<li>Number of sessions:  $occurrences</li>";
+            $ret .= "<li>Logged latest at:  $time</li>";
+            $ret .= "<br>";
         }
         $ret .= "</ul>";
         return $ret;

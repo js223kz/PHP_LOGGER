@@ -18,7 +18,6 @@ class DatabaseConnection
                                     \Settings::DATABASENAME, 8889);
         if (mysqli_connect_errno()) {
             throw new \Exception( $this->mysqli->error);
-            exit();
         }
         return $this->mysqli;
     }

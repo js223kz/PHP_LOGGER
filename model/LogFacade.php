@@ -21,11 +21,11 @@ class LogFacade
     }
 
     function loggThis($logMessageString, $logThisObject = null, $includeTrace = false) {
-       $this->saveNewLogItem->AddLogItem(new \model\LogItem($logMessageString, $includeTrace, $logThisObject));
+       $this->saveNewLogItem->AddLogItem(new LogItem($logMessageString, $includeTrace, $logThisObject));
     }
 
     function loggHeader($logMessageString) {
-       $this->saveNewLogItem->AddLogItem(new \model\LogItem("<h2>$logMessageString</h2>", null, false));
+       $this->saveNewLogItem->AddLogItem(new LogItem("<h2>$logMessageString</h2>", null, false));
     }
 
     /**
@@ -41,7 +41,7 @@ class LogFacade
 
     function getLogAllItems()
     {
-        $getLogItems = new \model\LogDAL();
+        $getLogItems = new LogDAL();
         return $getLogItems->getAllLogItems();
     }
 }
