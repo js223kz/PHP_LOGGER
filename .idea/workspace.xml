@@ -66,9 +66,15 @@
       <file leaf-file-name="AdminView.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/view/AdminView.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.75352114">
-              <caret line="63" column="18" selection-start-line="63" selection-start-column="18" selection-end-line="63" selection-end-column="18" />
-              <folding />
+            <state vertical-scroll-proportion="0.123239435">
+              <caret line="7" column="15" selection-start-line="7" selection-start-column="15" selection-end-line="7" selection-end-column="15" />
+              <folding>
+                <marker date="1445936263000" expanded="true" signature="2094:2406" placeholder="..." />
+                <marker date="1445936263000" expanded="true" signature="2113:2213" placeholder="..." />
+                <marker date="1445936263000" expanded="true" signature="2232:2386" placeholder="..." />
+                <marker date="1445936263000" expanded="true" signature="2300:2318" placeholder="..." />
+                <marker date="1445936263000" expanded="true" signature="2300:2365" placeholder="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -76,8 +82,8 @@
       <file leaf-file-name="LogView.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/view/LogView.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-30.5">
-              <caret line="119" column="48" selection-start-line="107" selection-start-column="5" selection-end-line="119" selection-end-column="48" />
+            <state vertical-scroll-proportion="-32.375">
+              <caret line="122" column="20" selection-start-line="114" selection-start-column="8" selection-end-line="122" selection-end-column="20" />
               <folding>
                 <marker date="1445429893000" expanded="true" signature="526:758" placeholder="..." />
                 <marker date="1445429893000" expanded="true" signature="567:745" placeholder="..." />
@@ -157,8 +163,8 @@
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1905" />
-    <option name="y" value="-349" />
+    <option name="x" value="-1899" />
+    <option name="y" value="-420" />
     <option name="width" value="1860" />
     <option name="height" value="1091" />
   </component>
@@ -327,7 +333,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1905" y="-349" width="1860" height="1091" extended-state="0" />
+    <frame x="-1899" y="-420" width="1860" height="1091" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -493,22 +499,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/view/LogView.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-30.5">
-          <caret line="119" column="48" selection-start-line="107" selection-start-column="5" selection-end-line="119" selection-end-column="48" />
-          <folding>
-            <marker date="1445429893000" expanded="true" signature="526:758" placeholder="..." />
-            <marker date="1445429893000" expanded="true" signature="567:745" placeholder="..." />
-            <marker date="1445429893000" expanded="true" signature="577:729" placeholder="..." />
-            <marker date="1445429893000" expanded="true" signature="620:718" placeholder="..." />
-            <marker date="1445429893000" expanded="true" signature="666:705" placeholder="..." />
-            <marker date="1445429893000" expanded="true" signature="1904:2074" placeholder="..." />
-            <marker date="1445429893000" expanded="false" signature="1983:1998" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/model/LogItem.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-3.5294118">
@@ -548,11 +538,33 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/view/LogView.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-32.375">
+          <caret line="122" column="20" selection-start-line="114" selection-start-column="8" selection-end-line="122" selection-end-column="20" />
+          <folding>
+            <marker date="1445429893000" expanded="true" signature="526:758" placeholder="..." />
+            <marker date="1445429893000" expanded="true" signature="567:745" placeholder="..." />
+            <marker date="1445429893000" expanded="true" signature="577:729" placeholder="..." />
+            <marker date="1445429893000" expanded="true" signature="620:718" placeholder="..." />
+            <marker date="1445429893000" expanded="true" signature="666:705" placeholder="..." />
+            <marker date="1445429893000" expanded="true" signature="1904:2074" placeholder="..." />
+            <marker date="1445429893000" expanded="false" signature="1983:1998" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/view/AdminView.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.75352114">
-          <caret line="63" column="18" selection-start-line="63" selection-start-column="18" selection-end-line="63" selection-end-column="18" />
-          <folding />
+        <state vertical-scroll-proportion="0.123239435">
+          <caret line="7" column="15" selection-start-line="7" selection-start-column="15" selection-end-line="7" selection-end-column="15" />
+          <folding>
+            <marker date="1445936263000" expanded="true" signature="2094:2406" placeholder="..." />
+            <marker date="1445936263000" expanded="true" signature="2113:2213" placeholder="..." />
+            <marker date="1445936263000" expanded="true" signature="2232:2386" placeholder="..." />
+            <marker date="1445936263000" expanded="true" signature="2300:2318" placeholder="..." />
+            <marker date="1445936263000" expanded="true" signature="2300:2365" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
