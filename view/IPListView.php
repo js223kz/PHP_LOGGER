@@ -22,17 +22,17 @@ class IPListView
      * data to show in list
      */
 
-    public function getIPList(LogService $logFacade)
+    public function getIPList(LogService $logService)
     {
         //returning array of LogItem objects
-        $logItems = $logFacade->getLogAllItems();
+        $logItems = $logService->getLogAllItems();
 
         foreach ($logItems as $logItem) {
 
             $num = $this->getNumberOfSessions($logItem->m_ip, $logItems);
             $latest = $this->getLatestSession($logItem->m_ip, $logItems);
 
-            if ($this->checkIfIPUnique($logItem)) {
+            if ($this->checkIfIPUnique($logItem->m_ip)) {
                 array_push($this->listItems, [Self::$ip => $logItem->m_ip, Self::$microTime => $latest, Self::$numberOfTimes => $num]);
             }
         }
@@ -91,11 +91,11 @@ class IPListView
      * @param $logItem , one particular LogItem objects
      * @return bool if ip-address is not already i list to show
      */
-    private function checkIfIPUnique($logItem)
+    private function checkIfIPUnique($ip)
     {
 
         foreach ($this->listItems as $value) {
-            if ($value[Self::$ip] == $logItem->m_ip) {
+            if ($value[Self::$ip] == $ip) {
                 return false;
             }
         }
@@ -109,7 +109,7 @@ class IPListView
             <html>
             <head>
               <meta charset="utf-8">
-              <title>Login Example</title>
+              <title>Logger</title>
             </head>
             <body>
               <h1>Logger</h1>

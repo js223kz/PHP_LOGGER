@@ -15,22 +15,22 @@ use view\SessionListView;
 
 class AdminController{
 
-    public function __construct(LogService $logFacade, IPListView $ipListView){
+    public function __construct(LogService $logService, IPListView $ipListView){
 
-        //$this->loggStuff($logFacade);
+        //$this->loggStuff($logService);
         if($ipListView->ipLinkIsClicked()){
-            $selectedIP = $ipListView->getProductID();
-            new \view\SessionListView($selectedIP);
+            $sessionList = new \view\SessionListView();
+            $sessionList->getSessionList($ipListView->getProductID(), $logService);
         }else{
-            $ipListView->getIPList($logFacade);
+            $ipListView->getIPList($logService);
         }
 
     }
 
-    public function loggStuff(LogService $logFacade) {
-        //$logFacade->loggHeader("Hallojsa");
-        //$logFacade->loggThis("Ettan igen");
-        //$logFacade->loggThis("Ett", null, true);
-        //$logFacade->loggThis("Från en Ettan include an object", new \Exception("foo exception"), false);
+    public function loggStuff(LogService $logService) {
+        //$logService->loggHeader("Hallojsa");
+        //$logService->loggThis("Ettan igen");
+        //$logService->loggThis("Ett", null, true);
+        //$logService->loggThis("Från en Ettan include an object", new \Exception("foo exception"), false);
     }
 }
