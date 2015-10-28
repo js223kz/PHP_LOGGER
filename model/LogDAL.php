@@ -38,7 +38,11 @@ class LogDAL
         return $logItems;
     }
 
-   public function AddLogItem(LogItem $newLogItem){
+    public function getLogItemsByIP($ip){
+
+    }
+
+   public function addLogItem(LogItem $newLogItem){
         $logitem = serialize($newLogItem);
 
        $query = $this->dbConnection->prepare("INSERT INTO `logitem` (`logitem`)
@@ -50,6 +54,8 @@ class LogDAL
        $query->bind_param('s', $logitem);
        $query->execute();
     }
+
+
 }
 /*public function getAllLogItems(){
     $logItems = array();

@@ -8,19 +8,27 @@
 
 namespace controller;
 
-use model\LogFacade;
-use view\AdminView;
+require_once('view/SessionListView.php');
+use model\LogService;
+use view\IPListView;
+use view\SessionListView;
 
 class AdminController{
 
-    public function __construct(LogFacade $logFacade, AdminView $adminView){
+    public function __construct(LogService $logFacade, IPListView $ipListView){
 
         //$this->loggStuff($logFacade);
-        $adminView->getIPList($logFacade);
+        if($ipListView->ipLinkIsClicked()){
+            $selectedIP = $ipListView->getProductID();
+            new \view\SessionListView($selectedIP);
+        }else{
+            $ipListView->getIPList($logFacade);
+        }
+
     }
 
-    public function loggStuff(LogFacade $logFacade) {
-        //$logFacade->loggHeader("Korkat");
+    public function loggStuff(LogService $logFacade) {
+        //$logFacade->loggHeader("Hallojsa");
         //$logFacade->loggThis("Ettan igen");
         //$logFacade->loggThis("Ett", null, true);
         //$logFacade->loggThis("Från en Ettan include an object", new \Exception("foo exception"), false);

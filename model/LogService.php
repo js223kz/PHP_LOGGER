@@ -11,7 +11,7 @@ require_once("model/LogDAL.php");
 require_once("model/LogItem.php");
 require_once("view/LogView.php");
 
-class LogFacade
+class LogService
 {
 
     private $saveNewLogItem;
@@ -21,11 +21,11 @@ class LogFacade
     }
 
     function loggThis($logMessageString, $logThisObject = null, $includeTrace = false) {
-       $this->saveNewLogItem->AddLogItem(new LogItem($logMessageString, $includeTrace, $logThisObject));
+       $this->saveNewLogItem->addLogItem(new LogItem($logMessageString, $includeTrace, $logThisObject));
     }
 
     function loggHeader($logMessageString) {
-       $this->saveNewLogItem->AddLogItem(new LogItem("<h2>$logMessageString</h2>", null, false));
+       $this->saveNewLogItem->addLogItem(new LogItem("<h2>$logMessageString</h2>", null, false));
     }
 
     /**
@@ -43,5 +43,10 @@ class LogFacade
     {
         $getLogItems = new LogDAL();
         return $getLogItems->getAllLogItems();
+    }
+
+    public function getLogItemsByIP($ip){
+        $getLogItemsByIP = new LogDAL();
+        return $getLogItemsByIP->getAllLogItems();
     }
 }

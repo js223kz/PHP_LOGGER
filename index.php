@@ -8,15 +8,15 @@
 
 require_once("Settings.php");
 require_once("ini.php");
-require_once("model/LogFacade.php");
+require_once("model/LogService.php");
 
 require_once("controller/AdminController.php");
-require_once("view/AdminView.php");
+require_once("view/IPListView.php");
 
-$logFacade = new \model\LogFacade();
-$adminView = new \view\AdminView();
+$logFacade = new \model\LogService();
+$ipListView = new \view\IPListView();
 
-$adminController = new \controller\AdminController($logFacade, $adminView);
+$adminController = new \controller\AdminController($logFacade, $ipListView);
 $data = new Settings();
 
 

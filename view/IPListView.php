@@ -2,16 +2,17 @@
 
 namespace view;
 
-use model\LogFacade;
+use model\LogService;
 
 require_once("model/LogItem.php");
 
-class adminView
+class IPListView
 {
 
     private static $ip = "ip";
     private static $microTime = "microtime";
     private static $numberOfTimes = "numberOfTimes";
+    private static $ipURL = "ip";
     private $listItems = array();
 
 
@@ -21,7 +22,7 @@ class adminView
      * data to show in list
      */
 
-    public function getIPList(LogFacade $logFacade)
+    public function getIPList(LogService $logFacade)
     {
         //returning array of LogItem objects
         $logItems = $logFacade->getLogAllItems();
@@ -130,9 +131,10 @@ class adminView
             $ip = $ipAdresses[Self::$ip];
             $occurrences = $ipAdresses[Self::$numberOfTimes];
             $time = $ipAdresses[Self::$microTime];
+            $ipUrl = $this->getIPUrl($ip);
 
 
-            $ret .= "<li>IP-address: $ip</li>";
+            $ret .= "<li>IP-address: <a href='$ipUrl'>$ip</a></li>";
             $ret .= "<li>Number of sessions:  $occurrences</li>";
             $ret .= "<li>Logged latest at:  $time</li>";
             $ret .= "<br>";
@@ -158,5 +160,20 @@ class adminView
     '));
 
         return true;
+    }
+
+    public function getIPUrl($ip) {
+        return "?".self::$ipURL."=$ip";
+    }
+
+    public function ipLinkIsClicked() {
+        if (isset($_GET[self::$ipURL]) ) {
+            return true;
+        }
+        return false;
+    }
+    public function getProductID() {
+        assert($this->ipLinkIsClicked());
+        return $_GET[self::$ipURL];
     }
 }
