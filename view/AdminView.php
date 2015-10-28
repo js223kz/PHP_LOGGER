@@ -35,6 +35,9 @@ class adminView
                 array_push($this->listItems, [Self::$ip => $logItem->m_ip, Self::$microTime => $latest, Self::$numberOfTimes => $num]);
             }
         }
+        //sorting array so last logged ipadress comes first
+        $this->sortBy(Self::$microTime,   $this->listItems);
+
         $this->renderHTML();
     }
 
@@ -50,7 +53,7 @@ class adminView
         $sessionDateArray = array();
 
         foreach ($logItems as $logItem) {
-            //create readable datetsring from microtime
+            //create readable datestring from microtime
             list($usec, $sec) = explode(" ", $logItem->m_microTime);
             $sessionDate = date("Y-m-d H:i:s", $sec);
 
@@ -136,5 +139,24 @@ class adminView
         }
         $ret .= "</ul>";
         return $ret;
+    }
+
+    function sortBy($field, &$array, $direction = 'desc')
+    {
+        usort($array, create_function('$a, $b', '
+        $a = $a["' . $field . '"];
+
+
+        $b = $b["' . $field . '"];
+
+        if ($a == $b)
+        {
+            return 0;
+        }
+
+        return ($a ' . ($direction == 'desc' ? '>' : '<') .' $b) ? -1 : 1;
+    '));
+
+        return true;
     }
 }
