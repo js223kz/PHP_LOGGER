@@ -9,22 +9,23 @@
 namespace controller;
 
 require_once('view/SessionListView.php');
+require_once('view/IPListView.php');
+require_once('view/SpecificSessionView.php');
+
 use model\LogService;
-use view\IPListView;
-use view\SessionListView;
+
 
 class AdminController{
 
-    public function __construct(LogService $logService, IPListView $ipListView){
+    private $sessionList;
+    private $ipListView;
+
+    public function __construct(LogService $logService){
+        $this->sessionList = new \view\SessionListView($logService);
+        $this->ipListView = new \view\IPListView($logService);
+        $this->echoView();
 
         //$this->loggStuff($logService);
-        if($ipListView->ipLinkIsClicked()){
-            $sessionList = new \view\SessionListView();
-            $sessionList->getSessionList($ipListView->getProductID(), $logService);
-        }else{
-            $ipListView->getIPList($logService);
-        }
-
     }
 
     public function loggStuff(LogService $logService) {
@@ -32,5 +33,15 @@ class AdminController{
         //$logService->loggThis("Ettan igen");
         //$logService->loggThis("Ett", null, true);
         //$logService->loggThis("Från en Ettan include an object", new \Exception("foo exception"), false);
+    }
+
+    public function echoView(){
+        if($this->ipListView->ipLinkIsClicked()){
+            $this->sessionList->getSessionList($this->ipListView->getIP());
+        }else if($this->sessionList->sessionLinkIsClicked()){
+            $specificSessionView = new \view\SpecificSessionView();
+        }else{
+            $this->ipListView->getIPList();
+        }
     }
 }

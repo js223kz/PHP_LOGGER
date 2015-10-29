@@ -9,14 +9,11 @@
 require_once("Settings.php");
 require_once("ini.php");
 require_once("model/LogService.php");
-
 require_once("controller/AdminController.php");
-require_once("view/IPListView.php");
 
-$logFacade = new \model\LogService();
-$ipListView = new \view\IPListView();
+$logService = new \model\LogService();
 
-$adminController = new \controller\AdminController($logFacade, $ipListView);
+$adminController = new \controller\AdminController($logService);
 $data = new Settings();
 
 

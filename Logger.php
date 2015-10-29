@@ -3,7 +3,7 @@
 require_once("model/LogCollection.php");
 require_once("model/LogDAL.php");
 require_once("model/LogItem.php");
-require_once("view/LogView.php");
+require_once("view/ListView.php");
 
 
 //uses globals for convenience
@@ -48,7 +48,7 @@ function loggHeader($logMessageString) {
 */
 /*function echoLog($doDumpSuperGlobals = true) {
 	global $logCollection;
-	$logView = new \model\LogView($logCollection);
+	$logView = new \model\LoggingView($logCollection);
 	echo $logView->getDebugData($doDumpSuperGlobals);
 }*/
 

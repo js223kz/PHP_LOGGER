@@ -4,7 +4,7 @@ namespace model;
 
 
 
-class LogView {
+class LoggingView {
 
 	private $log;
 

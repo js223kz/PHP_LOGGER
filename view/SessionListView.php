@@ -8,41 +8,31 @@
 
 namespace view;
 
+require_once("view/ListView.php");
 
-use model\LogService;
-
-class SessionListView
+class SessionListView extends ListView
 {
 
     private $logSessions = array();
-    private static $sessionID = "sessionId";
     private static $loggedDate = "loggedDate";
+    private static $pageTitle = "Ip-address: ";
+    private static $sessionURL = "session";
 
-    public function getSessionList($selectedIP, LogService $logService)
+
+    public function getSessionList($selectedIP)
     {
-        $logItems = $logService->getLogAllItems();
+        $logItems = $this->getLogItemsList();
 
         foreach ($logItems as $logItem) {
-            $latest = $this->getLatestSession($logItem->m_sessionID, $logItems);
-            if ($logItem->m_ip === $selectedIP) {
-                if($this->checkIfSessionUnique($logItem->m_sessionID)){
-                    array_push($this->logSessions, [Self::$sessionID => $logItem->m_sessionID, Self::$loggedDate => $latest]);
+            $latest = $this->getLatestSession($logItem[$this->sessionId], $logItems);
+            if ($logItem[$this->ip] === $selectedIP) {
+                if($this->checkIfUnique($logItem[$this->sessionId], $this->sessionId, $this->logSessions)){
+                    array_push($this->logSessions, [$this->sessionId => $logItem[$this->sessionId], Self::$loggedDate => $latest]);
                 }
             }
         }
-        //var_dump($this->logSessions);
-        $this->renderHTML($selectedIP);
-    }
-
-    private function checkIfSessionUnique($session)
-    {
-
-        foreach ($this->logSessions as $value) {
-            if ($value[Self::$sessionID] == $session) {
-                return false;
-            }
-        }
-        return true;
+        $this->sortBy(Self::$loggedDate, $this->logSessions);
+        $this->renderHTML(Self::$pageTitle . $selectedIP, $this->renderSessionList());
     }
 
     private function getLatestSession($sessionId, $logItems)
@@ -50,47 +40,39 @@ class SessionListView
         $sessionDateArray = array();
 
         foreach ($logItems as $logItem) {
-            //create readable datestring from microtime
-            list($usec, $sec) = explode(" ", $logItem->m_microTime);
-            $sessionDate = date("Y-m-d H:i:s", $sec);
-
-            if ($sessionId == $logItem->m_sessionID) {
-                if (!in_array($sessionDate, $sessionDateArray)) {
-                    array_push($sessionDateArray, $sessionDate);
+            $dateTime = $this->convertMicroTime($logItem[$this->microTime]);
+            if ($sessionId == $logItem[$this->sessionId]) {
+                if (!in_array($dateTime, $sessionDateArray)) {
+                    array_push($sessionDateArray, $dateTime);
                 }
             }
         }
         return end($sessionDateArray);
     }
-
-    private function renderHTML($selectedIP)
-    {
-        echo '<!DOCTYPE html>
-            <html>
-            <head>
-              <meta charset="utf-8">
-              <title>Logger</title>
-            </head>
-            <body>
-              <h1>Logger</h1>
-              <div class="container">
-                ' . $this->renderSessionList($selectedIP) . '
-              </div>
-             </body>
-            </html>
-        ';
+    public function sessionLinkIsClicked() {
+        if (isset($_GET[self::$sessionURL]) ) {
+            return true;
+        }
+        return false;
     }
 
-    private function renderSessionList($selectedIP)
-    {
-        $ret = "<h3>IP-address: $selectedIP</h3>
+    private function getSessionUrl($session) {
+        return "?".self::$sessionURL."=$session";
+    }
 
-				<ul>";
+    public function getSession() {
+        assert($this->ipLinkIsClicked());
+        return $_GET[self::$sessionURL];
+    }
+
+    private function renderSessionList()
+    {
+        $ret = "<ul>";
         foreach ($this->logSessions as $sessions) {
-            $sessionId = $sessions[Self::$sessionID];
+            $sessionId = $sessions[$this->sessionId];
             $lastLogged = $sessions[Self::$loggedDate];
-            //$ipUrl = $this->getIPUrl($session);
-            $ret .= "<li>Session: <a href=''>$sessionId</a></li>";
+            $sessionUrl = $this->getSessionUrl($sessions[$this->sessionId]);
+            $ret .= "<li>Session: <a href='$sessionUrl'>$sessionId</a></li>";
             $ret .= "<li>Last logged: $lastLogged</li>";
             $ret .= "<br>";
         }

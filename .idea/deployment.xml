@@ -2,14 +2,14 @@
 <project version="4">
   <component name="PublishConfigData">
     <serverData>
-      <paths name="logger-2">
+      <paths name="logassignment">
         <serverdata>
           <mappings>
             <mapping deploy="/var/www/html" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
-      <paths name="logging">
+      <paths name="logger-2">
         <serverdata>
           <mappings>
             <mapping deploy="/var/www/html" local="$PROJECT_DIR$" web="/" />
