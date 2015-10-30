@@ -12,7 +12,7 @@ require_once('DatabaseConnection.php');
 include("model/LogItem.php");
 class LogDAL
 {
-    private static $databaseTable = "logitem";
+    private static $databaseTable = "logitems";
     private $database;
     private $dbConnection;
 
@@ -45,7 +45,7 @@ class LogDAL
    public function addLogItem(LogItem $newLogItem){
         $logitem = serialize($newLogItem);
 
-       $query = $this->dbConnection->prepare("INSERT INTO `logitem` (`logitem`)
+       $query = $this->dbConnection->prepare("INSERT INTO `logitems` (`logitem`)
                                           VALUES (?)");
        if ($query === FALSE) {
            throw new \Exception($this->database->error);

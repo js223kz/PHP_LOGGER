@@ -15,7 +15,7 @@ class DatabaseConnection
     public function DbConnection(){
 
         $this->mysqli = new \mysqli(\Settings::HOST, \Settings::USERNAME, \Settings::PASSWORD,
-                                    \Settings::DATABASENAME, 8889);
+                                    \Settings::DATABASENAME);
         if (mysqli_connect_errno()) {
             throw new \Exception( $this->mysqli->error);
         }

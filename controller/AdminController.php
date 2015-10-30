@@ -23,23 +23,24 @@ class AdminController{
     public function __construct(LogService $logService){
         $this->sessionList = new \view\SessionListView($logService);
         $this->ipListView = new \view\IPListView($logService);
-        $this->echoView();
+        $this->echoView($logService);
 
         //$this->loggStuff($logService);
     }
 
     public function loggStuff(LogService $logService) {
-        //$logService->loggHeader("Hallojsa");
-        //$logService->loggThis("Ettan igen");
-        //$logService->loggThis("Ett", null, true);
-        //$logService->loggThis("Från en Ettan include an object", new \Exception("foo exception"), false);
+        $logService->loggHeader("Ny session");
+        $logService->loggThis("Ett");
+        $logService->loggThis("Ett", null, true);
+        $logService->loggThis("Från en Ettan include an object", new \Exception("foo exception"), false);
     }
 
-    public function echoView(){
+    public function echoView($logService){
         if($this->ipListView->ipLinkIsClicked()){
             $this->sessionList->getSessionList($this->ipListView->getIP());
         }else if($this->sessionList->sessionLinkIsClicked()){
             $specificSessionView = new \view\SpecificSessionView();
+            $specificSessionView->getSessionData($this->sessionList->getSession(), $logService);
         }else{
             $this->ipListView->getIPList();
         }

@@ -61,7 +61,7 @@ class SessionListView extends ListView
     }
 
     public function getSession() {
-        assert($this->ipLinkIsClicked());
+        assert($this->sessionLinkIsClicked());
         return $_GET[self::$sessionURL];
     }
 
