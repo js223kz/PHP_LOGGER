@@ -18,10 +18,18 @@ class LogDAL
 
 
     public function __construct(){
-        $this->database = new DatabaseConnection();
-        $this->dbConnection = $this->database->DbConnection();
+        try{
+            $this->database = new DatabaseConnection();
+            $this->dbConnection = $this->database->DbConnection();
+        }catch(\Exception $e){
+            throw new \Exception($e->getMessage());
+        }
     }
 
+    /**
+     * @return array with logItem objects
+     * @throws \Exception
+     */
     public function getAllLogItems(){
         $logItems = array();
         $query = $this->dbConnection->prepare("SELECT * FROM " . self::$databaseTable);
@@ -38,10 +46,10 @@ class LogDAL
         return $logItems;
     }
 
-    public function getLogItemsByIP($ip){
-
-    }
-
+    /**
+     * @param LogItem $newLogItem
+     * @throws \Exception
+     */
    public function addLogItem(LogItem $newLogItem){
         $logitem = serialize($newLogItem);
 

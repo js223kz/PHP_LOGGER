@@ -8,101 +8,90 @@
 
 namespace view;
 
-
-use model\LogService;
-
-class SpecificSessionView
+/**
+ * View that shows all logItems in a specific session
+ */
+class SpecificSessionView extends ListView
 {
-    private $logList = array();
-    private static $ip = "ip";
-    private static $message = "message";
-    private static $sessionId = "session";
-    private static $object = "object";
-    private static $backtrace = "backtrace";
-    private static $calledFrom = "calledFrom";
-    private static $microtime = "microtime";
+    private static $pageTitle = "SessionId: ";
 
-    public function getSessionData($sessionId, LogService $logService){
-        var_dump($sessionId);
-
-        $logItems = $logService->getLogAllItems();
-        $debugItems = "";
-       foreach($logItems as $logitem){
-           //$debugItems .= $this->showDebugItem($logitem);
-
-            if($logitem->m_sessionID == $sessionId){
-                var_dump($logitem->m_message);
-                var_dump($logitem->m_message);
-                echo ($logitem->m_object);
-                $dumps = "
-			<div>
-				<hr/>
-				<h2>Debug</h2>
-				<table>
-					<tr>
-				   		<td>
-				   			<h3>Debug Items</h3>
-				   			<ol>
-				   				$debugItems
-				   			</ol>
-					 	</td>
-					</tr>
-			    </table>
-		    </div>";
-                return $dumps;
-               /* array_push($this->logList, [
-                    Self::$message => $logitem->m_message,
-                    Self::$microtime => $logitem->m_microTime,
-                    Self::$object => $logitem->m_object,
-                    Self::$backtrace => $logitem->m_debug_backtrace,
-                    Self::$calledFrom => $logitem->m_calledFrom
-                ]);*/
-            }
-        }
-        var_dump($this->logList);
+    public function getSpecificSessionList($sessionId){
+        $title = Self::$pageTitle . $sessionId;
+        $this->renderHTML($title, $this->getSessionData($sessionId));
     }
 
+    /**
+     * @param $sessionId
+     * @return string that represents html for all logged items
+     */
+    public function getSessionData($sessionId){
+
+        $logItems = $this->getLogItemsCollection();
+        $debugItems = "";
+
+        foreach($logItems as $logitem){
+            if($logitem->m_sessionID === $sessionId) {
+                $debugItems .= $this->showLogItem($logitem);
+            }
+        }
+        $html = "
+            <div>
+                <hr/>
+                <table>
+                    <tr>
+                        <td>
+                            <h3>Debug Items</h3>
+                            <ol>
+                                $debugItems
+                            </ol>
+                        </td>
+                    </tr>
+                </table>
+            </div>";
+        return $html;
+    }
 
     /**
      * @param LogItem $item
      * @return string HTML
      */
-    private function showDebugItem(LogItem $item) {
-
-        if ($item->m_debug_backtrace != null) {
-            $debug = "<h4>Trace:</h4>
+    private function showLogItem($logItem)
+    {
+        if ($logItem->m_debug_backtrace != null) {
+                $debug = "<h4>Trace:</h4>
 					 <ul>";
-            foreach ($item->m_debug_backtrace AS $key => $row) {
+                foreach ($logItem->m_debug_backtrace AS $key => $row) {
 
-                //the two topmost items are part of the logger
-                //skip those
-                if ($key < 2) {
-                    continue;
+                    //the two topmost items are part of the logger
+                    //skip those
+                    if ($key < 2) {
+                        continue;
+                    }
+                    $key = $key - 2;
+                    $debug .= "<li> $key " . LogItem::cleanFilePath($row['file']) . " Line : " . $row["line"] . "</li>";
                 }
-                $key = $key - 2;
-                $debug .= "<li> $key " . LogItem::cleanFilePath($row['file']) . " Line : " . $row["line"] .  "</li>";
+                $debug .= "</ul>";
+            } else {
+                $debug = "";
             }
-            $debug .= "</ul>";
-        } else {
-            $debug = "";
-        }
 
-        if ($item->m_object != null)
-            $object = print_r($item->m_object, true);
-        else
-            $object = "";
-        list($usec, $sec) = explode(" ", microtime());
+            if ($logItem->m_object != null) {
+                $object = print_r($logItem->m_object, true);
+            } else {
+                $object = "";
+            }
 
-        $date = date("Y-m-d H:i:s", $sec);
-        $ret =  "<li>
-					<Strong>$item->m_message </strong> $item->m_calledFrom
-					<div style='font-size:small'>$date $usec</div>
+            $date = $this->convertMicroTime($logItem->m_microTime);
+            $ret = "<li>
+					<strong>$logItem->m_message </strong> $logItem->m_calledFrom
+					<div style='font-size:small'>$date</div>
 					<pre>$object</pre>
 
 					$debug
 
 				</li>";
 
-        return $ret;
-    }
+            return $ret;
+        }
+
 }

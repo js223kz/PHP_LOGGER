@@ -10,8 +10,12 @@ namespace model;
 
 class DatabaseConnection
 {
-
     private $mysqli;
+
+    /**
+     * @return \mysqli
+     * @throws \Exception
+     */
     public function DbConnection(){
 
         $this->mysqli = new \mysqli(\Settings::HOST, \Settings::USERNAME, \Settings::PASSWORD,

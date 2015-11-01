@@ -9,11 +9,11 @@
 namespace view;
 
 use model\LogService;
-require_once("view/ListView.php");
 
+//Baseclass that implements methods and variables
+//used in views to avoid duplicated code
 abstract class ListView
 {
-
     private $logService;
     private $logItems = array();
     protected $ip = "ip";
@@ -26,20 +26,34 @@ abstract class ListView
         $this->setLogItemsList();
     }
 
-    private function getLogItemsCollection(){
-        return $this->logService->getLogAllItems();
+    /**
+     * @return array with LogItem objects from database
+     */
+    public function getLogItemsCollection(){
+        return $this->logService->getAllLogItems();
     }
 
+    /**
+     * To avoid looping through unneccesary data in views
+     *this method sets a list with just the required data
+    */
     private function setLogItemsList(){
         foreach($this->getLogItemsCollection() as $logItem){
             array_push($this->logItems, [$this->ip => $logItem->m_ip, $this->microTime => $logItem->m_microTime, $this->sessionId => $logItem->m_sessionID]);
         }
     }
 
+    /**
+     * @return array with required LogItem data
+     */
     protected function getLogItemsList(){
         return $this->logItems;
     }
 
+    /**
+     * Checks if either ip number or sessionId is unique
+    (depending on which view is calling the method)
+     * */
     protected function checkIfUnique($valueToCheck, $arrayValue, $array)
     {
         foreach ($array as $value) {
@@ -65,12 +79,18 @@ abstract class ListView
         return true;
     }
 
+    /*
+     * converts microtime to readable string
+     */
     protected function convertMicroTime($microTime){
         list($usec, $sec) = explode(" ", $microTime);
         $sessionDate = date("Y-m-d H:i:s", $sec);
         return $sessionDate;
     }
 
+    /*
+     * renders overall layout
+     */
     protected function renderHTML($title, $function)
     {
         echo '<!DOCTYPE html>

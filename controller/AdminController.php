@@ -28,19 +28,21 @@ class AdminController{
         //$this->loggStuff($logService);
     }
 
+    //examples of how to log specific items
     public function loggStuff(LogService $logService) {
         $logService->loggHeader("Ny session");
-        $logService->loggThis("Ett");
-        $logService->loggThis("Ett", null, true);
-        $logService->loggThis("Från en Ettan include an object", new \Exception("foo exception"), false);
+        $logService->loggThis("Från ett annat ip-nummer");
+        $logService->loggThis("Annat ip-nummer", null, true);
+        $logService->loggThis("Från ett annat ip-nummer inkluderar ett objekt", new \Exception("foo exception"), false);
     }
 
+    //render views depending on user input
     public function echoView($logService){
         if($this->ipListView->ipLinkIsClicked()){
             $this->sessionList->getSessionList($this->ipListView->getIP());
         }else if($this->sessionList->sessionLinkIsClicked()){
-            $specificSessionView = new \view\SpecificSessionView();
-            $specificSessionView->getSessionData($this->sessionList->getSession(), $logService);
+            $specificSessionView = new \view\SpecificSessionView($logService);
+            $specificSessionView->getSpecificSessionList($this->sessionList->getSession());
         }else{
             $this->ipListView->getIPList();
         }

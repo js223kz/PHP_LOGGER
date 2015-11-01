@@ -10,6 +10,11 @@ namespace view;
 
 require_once("view/ListView.php");
 
+/**
+ * View that shows a list of unique sessions
+ * for a specific ip-number
+ */
+
 class SessionListView extends ListView
 {
 
@@ -19,6 +24,7 @@ class SessionListView extends ListView
     private static $sessionURL = "session";
 
 
+    //get list of unique session for that specific ip-number
     public function getSessionList($selectedIP)
     {
         $logItems = $this->getLogItemsList();
@@ -35,6 +41,12 @@ class SessionListView extends ListView
         $this->renderHTML(Self::$pageTitle . $selectedIP, $this->renderSessionList());
     }
 
+    /**
+     * @param $sessionId
+     * @param $logItems, array of ip-numbers, sessions, and dates
+     * @return mixed
+     * uses temporary array to sort session dates and get the latest logged
+     */
     private function getLatestSession($sessionId, $logItems)
     {
         $sessionDateArray = array();
@@ -49,6 +61,11 @@ class SessionListView extends ListView
         }
         return end($sessionDateArray);
     }
+    /**
+     * @return bool
+     * checks if user clicked sessionlink
+     * to view specific logged items in that session
+     */
     public function sessionLinkIsClicked() {
         if (isset($_GET[self::$sessionURL]) ) {
             return true;
@@ -65,6 +82,9 @@ class SessionListView extends ListView
         return $_GET[self::$sessionURL];
     }
 
+    /**
+     * @return string that represents HTML for that list of sessions
+     */
     private function renderSessionList()
     {
         $ret = "<ul>";
